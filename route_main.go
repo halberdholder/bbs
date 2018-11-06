@@ -25,6 +25,7 @@ func index(writer http.ResponseWriter, request *http.Request) {
 		_, err := session(writer, request)
 		if err != nil {
 			generateHTML(writer, threads, "layout", "public.navbar", "index")
+			info("anonymous", request.Host, "visited")
 		} else {
 			generateHTML(writer, threads, "layout", "private.navbar", "index")
 		}

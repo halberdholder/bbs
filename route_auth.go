@@ -57,8 +57,10 @@ func authenticate(writer http.ResponseWriter, request *http.Request) {
 		}
 		http.SetCookie(writer, &cookie)
 		http.Redirect(writer, request, "/", 302)
+		info("user", user.Email, "login success")
 	} else {
 		http.Redirect(writer, request, "/login", 302)
+		info("user", user.Email, "login failed")
 	}
 
 }
