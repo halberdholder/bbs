@@ -1,0 +1,7 @@
+{
+  "Address"        : ":8001",
+  "ReadTimeout"    : 10,
+  "WriteTimeout"   : 600,
+  "Static"         : "public",
+  "LogFile"        : "/var/log/chitchat.log"
+}
