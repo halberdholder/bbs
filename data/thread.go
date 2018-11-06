@@ -2,12 +2,13 @@ package data
 
 import (
 	"time"
-)
+	)
 
 type Thread struct {
 	Id        int
 	Uuid      string
 	Topic     string
+	Body      string
 	UserId    int
 	CreatedAt time.Time
 }
@@ -63,14 +64,14 @@ func (thread *Thread) Posts() (posts []Post, err error) {
 }
 
 // Create a new thread
-func (user *User) CreateThread(topic string) (conv Thread, err error) {
-	statement := "insert into threads (uuid, topic, user_id, created_at) values (?, ?, ?, ?)"
+func (user *User) CreateThread(topic, body string) (conv Thread, err error) {
+	statement := "insert into threads (uuid, topic, body, user_id, created_at) values (?, ?, ?, ?, ?)"
 	stmt, _ := Db.Prepare(statement)
 	defer stmt.Close()
 
 	uuid := createUUID()
 	// use QueryRow to return a row and scan the returned id into the Session struct
-	_, err = stmt.Exec(uuid, topic, user.Id, time.Now())
+	_, err = stmt.Exec(uuid, topic, body, user.Id, time.Now())
 	if err != nil {
 		return
 	}
@@ -96,14 +97,14 @@ func (user *User) CreatePost(conv Thread, body string) (post Post, err error) {
 
 // Get all threads in the database and returns it
 func Threads() (threads []Thread, err error) {
-	rows, err := Db.Query("SELECT id, uuid, topic, user_id, created_at FROM threads ORDER BY created_at DESC")
+	rows, err := Db.Query("SELECT id, uuid, topic, body, user_id, created_at FROM threads ORDER BY created_at DESC")
 	defer rows.Close()
 	if err != nil {
 		return
 	}
 	for rows.Next() {
 		conv := Thread{}
-		if err = rows.Scan(&conv.Id, &conv.Uuid, &conv.Topic, &conv.UserId, &conv.CreatedAt); err != nil {
+		if err = rows.Scan(&conv.Id, &conv.Uuid, &conv.Topic, &conv.Body, &conv.UserId, &conv.CreatedAt); err != nil {
 			return
 		}
 		threads = append(threads, conv)
@@ -114,8 +115,8 @@ func Threads() (threads []Thread, err error) {
 // Get a thread by the UUID
 func ThreadByUUID(uuid string) (conv Thread, err error) {
 	conv = Thread{}
-	err = Db.QueryRow("SELECT id, uuid, topic, user_id, created_at FROM threads WHERE uuid = ?", uuid).
-		Scan(&conv.Id, &conv.Uuid, &conv.Topic, &conv.UserId, &conv.CreatedAt)
+	err = Db.QueryRow("SELECT id, uuid, topic, body, user_id, created_at FROM threads WHERE uuid = ?", uuid).
+		Scan(&conv.Id, &conv.Uuid, &conv.Topic, &conv.Body, &conv.UserId, &conv.CreatedAt)
 	return
 }
 

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/halberdholder/gwp/Chapter_2_Go_ChitChat/chitchat/data"
+	"github.com/halberdholder/bbs/data"
 	"net/http"
 )
 
@@ -19,7 +19,6 @@ func err(writer http.ResponseWriter, request *http.Request) {
 
 func index(writer http.ResponseWriter, request *http.Request) {
 	threads, err := data.Threads()
-	info(threads[0].Topic)
 	if err != nil {
 		error_message(writer, request, "Cannot get threads")
 	} else {

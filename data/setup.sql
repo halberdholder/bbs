@@ -20,6 +20,7 @@ create table threads (
   id         int primary key auto_increment,
   uuid       varchar(64) not null unique,
   topic      text,
+  body       test,
   user_id    int not null,
   created_at timestamp not null,
   foreign key(user_id) references users(id)

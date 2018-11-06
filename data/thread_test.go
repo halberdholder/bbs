@@ -20,7 +20,7 @@ func Test_CreateThread(t *testing.T) {
 	if err := users[0].Create(); err != nil {
 		t.Error(err, "Cannot create user.")
 	}
-	conv, err := users[0].CreateThread("My first thread")
+	conv, err := users[0].CreateThread("My first thread", "hello world")
 	if err != nil {
 		t.Error(err, "Cannot create thread")
 	}

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/halberdholder/gwp/Chapter_2_Go_ChitChat/chitchat/data"
+	"github.com/halberdholder/bbs/data"
 	"net/http"
 )
 

@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/halberdholder/gwp/Chapter_2_Go_ChitChat/chitchat/data"
+	"github.com/halberdholder/bbs/data"
 	"net/http"
 )
 
@@ -33,8 +33,9 @@ func createThread(writer http.ResponseWriter, request *http.Request) {
 			danger(err, "Cannot get user from session")
 		}
 		topic := request.PostFormValue("topic")
+		body := request.PostFormValue("body")
 		if topic != "" {
-			if _, err := user.CreateThread(topic); err != nil {
+			if _, err := user.CreateThread(topic, body); err != nil {
 				danger(err, "Cannot create thread")
 			}
 		}

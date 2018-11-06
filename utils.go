@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/halberdholder/gwp/Chapter_2_Go_ChitChat/chitchat/data"
+	"github.com/halberdholder/bbs/data"
 	"html/template"
 	"log"
 	"net/http"
