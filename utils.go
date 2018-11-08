@@ -9,6 +9,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"regexp"
 	"strings"
 )
 
@@ -86,8 +87,23 @@ func generateHTML(writer http.ResponseWriter, data interface{}, filenames ...str
 		files = append(files, fmt.Sprintf("templates/%s.html", file))
 	}
 
-	templates := template.Must(template.ParseFiles(files...))
+	funcMap := template.FuncMap{
+		"recogurl": recogURL,
+		"html":     unescaped,
+	}
+
+	templates := template.New("layout.html").Funcs(funcMap)
+	templates = template.Must(templates.ParseFiles(files...))
 	templates.ExecuteTemplate(writer, "layout", data)
+}
+
+func recogURL(body string) string {
+	reg := regexp.MustCompile(`(https?://[\w|=|\?|\.|/|&|-]+)`)
+	return reg.ReplaceAllString(body, `<a href="$1">$1</a>`)
+}
+
+func unescaped(x string) interface{} {
+	return template.HTML(x)
 }
 
 // for logging
