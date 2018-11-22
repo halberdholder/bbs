@@ -5,7 +5,7 @@
       <span class="lead">
           <i class="fa fa-comment-o"></i>
           <pre class="topic-size" >{{ .Topic }}</pre>
-          <pre>{{ .Body | recogurl | html }}</pre>
+          <pre>{{ .Body | html }}</pre>
       </span>
     <div class="pull-right">
       Started by {{ .User.Name }} - {{ .CreatedAtDate }}
@@ -15,7 +15,7 @@
   
   {{ range .Posts }}
   <div class="panel-body">
-          <span class="lead"> <i class="fa fa-comment"></i> <pre>{{ .Body | recogurl | html }}</pre></span>
+          <span class="lead"> <i class="fa fa-comment"></i> <pre>{{ .Body | html }}</pre></span>
     <div class="pull-right">
       {{ .User.Name }} - {{ .CreatedAtDate }}
     </div>    

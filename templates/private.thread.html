@@ -1,11 +1,14 @@
 {{ define "content" }}
 
+<script src="/static/ckeditor/ckeditor.js"></script>
+
 <div class="panel panel-default">
   <div class="panel-heading">
       <span class="lead">
           <i class="fa fa-comment-o"></i>
           <pre class="topic-size">{{ .Topic }}</pre>
-          <pre>{{ .Body | recogurl | html }}</pre>
+          <!-- <pre>{{ .Body | recogurl | html }}</pre> -->
+          <pre>{{ .Body | html }}</pre>
       </span>
     <div class="pull-right">
       Started by {{ .User.Name }} - {{ .CreatedAtDate }}
@@ -17,7 +20,7 @@
   <div class="panel-body">
           <span class="lead">
               <i class="fa fa-comment"></i>
-              <pre>{{ .Body | recogurl | html }}</pre>
+              <pre>{{ .Body | html }}</pre>
           </span>
     <div class="pull-right">
       {{ .User.Name }} - {{ .CreatedAtDate }}
@@ -32,7 +35,12 @@
     <div class="panel-body">
      <form role="form" action="/thread/post" method="post">
        <div class="form-group">
-         <textarea class="form-control" name="body" id="body" placeholder="Write your reply here" rows="3"></textarea>
+         <textarea name="body" id="editor1" placeholder="Write your reply here" rows="4"></textarea>
+        <script>
+                CKEDITOR.replace('editor1', {
+                        language: 'zh-CN',//改成中文版
+                });
+        </script>
          <input type="hidden" name="uuid" value="{{ .Uuid }}">
          <br/>
          <button class="btn btn-primary pull-right" type="submit">Reply</button>

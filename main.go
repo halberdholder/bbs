@@ -23,6 +23,8 @@ func main() {
 	// error
 	mux.HandleFunc("/err", err)
 
+	mux.HandleFunc("/ckeditorUpload", ckeditorUpload)
+
 	// defined in route_auth.go
 	mux.HandleFunc("/login", login)
 	mux.HandleFunc("/logout", logout)
