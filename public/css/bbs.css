@@ -34,7 +34,7 @@ div pre {
 
 
 .btn-link:hover, .btn-link:focus, .btn-link:active, .btn-link.active, .open .dropdown-toggle.btn-link {
-        color: red;
+        color: red !important;
         border-color: #285e8e; /*set the color you want here*/
 }
 
