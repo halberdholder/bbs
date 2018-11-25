@@ -120,6 +120,29 @@ func ThreadByUUID(uuid string) (conv Thread, err error) {
 	return
 }
 
+func ThreadsByPage(CurrentPage, PageSize int64) (threads []Thread, err error) {
+	rows, err := Db.Query(
+		"SELECT id, uuid, topic, body, user_id, created_at FROM threads ORDER BY created_at DESC " +
+			   "LIMIT ?, ?", (CurrentPage-1)*PageSize, PageSize)
+	defer rows.Close()
+	if err != nil {
+		return
+	}
+	for rows.Next() {
+		conv := Thread{}
+		if err = rows.Scan(&conv.Id, &conv.Uuid, &conv.Topic, &conv.Body, &conv.UserId, &conv.CreatedAt); err != nil {
+			return
+		}
+		threads = append(threads, conv)
+	}
+	return
+}
+
+func TotalThreads() (total int64, err error) {
+	err = Db.QueryRow("select count(id) from threads").Scan(&total)
+	return
+}
+
 // Get a post by the UUID
 func PostByUUID(uuid string) (conv Post, err error) {
 	conv = Post{}
