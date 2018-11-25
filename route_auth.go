@@ -3,13 +3,29 @@ package main
 import (
 	"github.com/halberdholder/bbs/data"
 	"net/http"
+	"strconv"
 )
+
+type LoginInfo struct {
+	ThreadUuid string
+	Failed bool
+}
 
 // GET /login
 // Show the login page
 func login(writer http.ResponseWriter, request *http.Request) {
-	t := parseTemplateFiles("login.layout", "public.navbar", "login")
-	t.Execute(writer, nil)
+	if err := request.ParseForm(); err != nil {
+		danger(err, "Cannot prase form")
+	}
+
+	failed, _ := strconv.ParseBool(request.FormValue("failed"))
+
+	loginInfo := LoginInfo {
+		ThreadUuid: request.FormValue("uuid"),
+		Failed: failed,
+	}
+
+	generateHTML(writer, loginInfo,"login.layout", "public.navbar", "login")
 }
 
 // GET /signup
@@ -56,10 +72,16 @@ func authenticate(writer http.ResponseWriter, request *http.Request) {
 			HttpOnly: true,
 		}
 		http.SetCookie(writer, &cookie)
-		http.Redirect(writer, request, "/", 302)
+
+		threadUuid := request.PostFormValue("uuid")
+		if threadUuid != ""{
+			http.Redirect(writer, request, "/thread/read?id="+"threadUuid", 302)
+		} else {
+			http.Redirect(writer, request, "/", 302)
+		}
 		info("user", user.Email, "login success")
 	} else {
-		http.Redirect(writer, request, "/login", 302)
+		http.Redirect(writer, request, "/login?failed=true", 302)
 		info("user", user.Email, "login failed")
 	}
 
