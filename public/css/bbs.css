@@ -18,6 +18,7 @@
   margin-right: 15px;
   padding-top:    10px;
   padding-bottom: 10px;
+  font-size:    16px;
 }
 
 /* CKeidtor输入的Body 已编排格式 */
@@ -25,11 +26,13 @@ div pre {
   border:   none !important;
   background-color: #FFFFFF !important;
   padding: 0px !important;
+  font-size: 16px !important;
 }
 
 /* CKeidtor输入的Body 未编排格式 */
 .bbs-text {
   padding: 10px 15px;
+  font-size: 16px;
 }
 
 
