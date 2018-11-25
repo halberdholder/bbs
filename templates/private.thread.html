@@ -4,28 +4,25 @@
 
 <div class="panel panel-default">
   <div class="panel-heading">
-      <span class="lead">
-          <i class="fa fa-comment-o"></i>
-          <pre class="topic-size">{{ .Topic }}</pre>
-          <!-- <pre>{{ .Body | recogurl | html }}</pre> -->
-          <pre>{{ .Body | html }}</pre>
-      </span>
-    <div class="pull-right">
-      Started by {{ .User.Name }} - {{ .CreatedAtDate }}
-    </div>
-
+          <h3 class="panel-title bbs-title">
+                  <span class="bbs-pre">{{ .Topic }}</span>
+          </h3>
   </div>
+  <div class="panel-footer">
+        {{ .CreatedAtDate }}&nbsp;&nbsp;&nbsp;作者:&nbsp;{{ .User.Name }}&nbsp;&nbsp;&nbsp;评论数:&nbsp;{{ .NumReplies }}&nbsp;&nbsp;&nbsp;分类: 杂项
+  </div>
+
+  <span class="bbs-pre bbs-body">{{ .Body | html }}</span>
   
   {{ range .Posts }}
   <div class="panel-body">
-          <span class="lead">
+          <span>
               <i class="fa fa-comment"></i>
-              <pre>{{ .Body | html }}</pre>
+              {{ .User.Name }}&nbsp;&nbsp;&nbsp;{{ .CreatedAtDate }}
           </span>
-    <div class="pull-right">
-      {{ .User.Name }} - {{ .CreatedAtDate }}
-    </div>    
   </div>
+
+  <span class="bbs-pre bbs-body">{{ .Body | html }}</span>
   {{ end }}    
 
 </div>
@@ -41,8 +38,8 @@
                         language: 'zh-CN',//改成中文版
                 });
         </script>
-         <input type="hidden" name="uuid" value="{{ .Uuid }}">
          <br/>
+         <input type="hidden" name="uuid" value="{{ .Uuid }}">
          <button class="btn btn-primary pull-right" type="submit">Reply</button>
        </div>
      </form>

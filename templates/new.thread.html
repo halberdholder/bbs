@@ -3,9 +3,8 @@
 <script src="/static/ckeditor/ckeditor.js"></script>
 
 <form role="form" action="/thread/create" method="post">
-  <div class="lead">Start a new thread with the following topic and body</div>
   <div class="form-group">
-    <textarea class="form-control" name="topic" id="topic" placeholder="Thread topic here" rows="1"></textarea>
+    <textarea class="form-control" name="topic" id="topic" placeholder="输入标题" rows="1"></textarea>
 
     <textarea name="body" id="editor" placeholder="Thread body here" rows="10"></textarea>
     <script>
@@ -14,13 +13,9 @@
             });
     </script>
     <br/>
-    <br/>
-    <button class="btn btn-lg btn-primary pull-right" type="submit">Start this thread</button>
+    <button class="btn btn-lg btn-primary pull-right" type="submit">发布</button>
   </div>
 </form>
 
-        <script>
-                    initSample();
-        </script>
 
 {{ end }}

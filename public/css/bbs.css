@@ -1,8 +1,25 @@
 
-.bbs-topic {
-  font-size: 22px;
+
+/* index页面主题属性 */
+.bbs-title {
+  font-size:    22px;
+/*border-style: none;
+  font-weight:  600;
+  color:        #333333;
+  padding-top:  0px;
+  margin-top:   0px; */
+}
+
+.bbs-pre {
+  white-space:  pre;
 }
 
 .bbs-body {
-  font-size: 18px
+  border:  none;
+}
+
+
+.btn-link:hover, .btn-link:focus, .btn-link:active, .btn-link.active, .open .dropdown-toggle.btn-link {
+        color: red;
+        border-color: #285e8e; /*set the color you want here*/
 }

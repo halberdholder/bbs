@@ -1,23 +1,15 @@
 {{ define "content" }}
-<p class="lead">
-  <a href="/thread/new">Start a new thread</a> or join one below!
-</p>
 
 {{ range . }}
   <div class="panel panel-default">
     <div class="panel-heading">
-            <span class="lead">
-                <i class="fa fa-comment-o"></i>
-                <a href="/thread/read?id={{.Uuid }}"> <pre class="topic-size">{{ .Topic }}</pre> </a>
-            </span>
+            <h3 class="panel-title bbs-title">
+                <i class="fa fa-comment-o pull-left"></i>
+                <a class="btn-link bbs-pre" href="/thread/read?id={{.Uuid }}"> {{ .Topic }} </a>
+            </h3>
     </div>
-    <div class="panel-body">
-      Started by {{ .User.Name }} - {{ .CreatedAtDate }} - {{ .NumReplies }} 条评论.
-      <!--
-      <div class="pull-right">
-        <a href="/thread/read?id={{.Uuid }}">Read more</a>
-      </div>
-      -->
+    <div class="panel-footer">
+           {{ .CreatedAtDate }}&nbsp;&nbsp;&nbsp;作者:&nbsp;{{ .User.Name }}&nbsp;&nbsp;&nbsp;评论数:&nbsp;{{ .NumReplies }}
     </div>
   </div>
 {{ end }}

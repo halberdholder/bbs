@@ -2,7 +2,7 @@ package data
 
 import (
 	"time"
-	)
+)
 
 type Thread struct {
 	Id        int
@@ -24,11 +24,11 @@ type Post struct {
 
 // format the CreatedAt date to display nicely on the screen
 func (thread *Thread) CreatedAtDate() string {
-	return thread.CreatedAt.Format("Jan 2, 2006 at 3:04pm")
+	return thread.CreatedAt.Format("2006-01-02 15:04:05")
 }
 
 func (post *Post) CreatedAtDate() string {
-	return post.CreatedAt.Format("Jan 2, 2006 at 3:04pm")
+	return post.CreatedAt.Format("2006-01-02 15:04:05")
 }
 
 // get the number of posts in a thread
