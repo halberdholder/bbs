@@ -8,7 +8,7 @@ import (
 
 type LoginInfo struct {
 	ThreadUuid string
-	Failed bool
+	Failed     bool
 }
 
 // GET /login
@@ -20,12 +20,12 @@ func login(writer http.ResponseWriter, request *http.Request) {
 
 	failed, _ := strconv.ParseBool(request.FormValue("failed"))
 
-	loginInfo := LoginInfo {
+	loginInfo := LoginInfo{
 		ThreadUuid: request.FormValue("uuid"),
-		Failed: failed,
+		Failed:     failed,
 	}
 
-	generateHTML(writer, loginInfo,"login.layout", "public.navbar", "login")
+	generateHTML(writer, loginInfo, "login.layout", "public.navbar", "login")
 }
 
 // GET /signup
@@ -48,9 +48,11 @@ func signupAccount(writer http.ResponseWriter, request *http.Request) {
 	}
 	info("user signup", user)
 	if err := user.Create(); err != nil {
+		generateHTML(writer, true, "login.layout", "public.navbar", "signup")
 		danger(err, "Cannot create user")
+	} else {
+		http.Redirect(writer, request, "/login", 302)
 	}
-	http.Redirect(writer, request, "/login", 302)
 }
 
 // POST /authenticate
@@ -61,6 +63,7 @@ func authenticate(writer http.ResponseWriter, request *http.Request) {
 	if err != nil {
 		danger(err, "Cannot find user")
 	}
+	threadUuid := request.PostFormValue("uuid")
 	if user.Password == data.Encrypt(request.PostFormValue("password")) {
 		session, err := user.CreateSession()
 		if err != nil {
@@ -73,15 +76,19 @@ func authenticate(writer http.ResponseWriter, request *http.Request) {
 		}
 		http.SetCookie(writer, &cookie)
 
-		threadUuid := request.PostFormValue("uuid")
-		if threadUuid != ""{
-			http.Redirect(writer, request, "/thread/read?id="+"threadUuid", 302)
+		if threadUuid != "" {
+			http.Redirect(writer, request, "/thread/read?id="+threadUuid, 302)
 		} else {
 			http.Redirect(writer, request, "/", 302)
 		}
 		info("user", user.Email, "login success")
 	} else {
-		http.Redirect(writer, request, "/login?failed=true", 302)
+		loginInfo := LoginInfo{
+			ThreadUuid: threadUuid,
+			Failed:     true,
+		}
+
+		generateHTML(writer, loginInfo, "login.layout", "public.navbar", "login")
 		info("user", user.Email, "login failed")
 	}
 

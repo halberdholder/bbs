@@ -143,3 +143,19 @@ func (post *Post) User() (user User) {
 		Scan(&user.Id, &user.Uuid, &user.Name, &user.Email, &user.CreatedAt)
 	return
 }
+
+func (thread *Thread) CompatibleNonCkeidtor() (b bool) {
+	if thread.Id >= 1 && thread.Id <= 8 {
+		return true
+	}
+
+	return false
+}
+
+func (post *Post) CompatibleNonCkeidtor() (b bool) {
+	if post.ThreadId >= 1 && post.ThreadId <= 8 {
+		return true
+	}
+
+	return false
+}

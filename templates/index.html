@@ -5,8 +5,11 @@
     <div class="panel-heading">
             <h3 class="panel-title bbs-title">
                 <i class="fa fa-comment-o pull-left"></i>
-                <a class="btn-link bbs-pre" href="/thread/read?id={{.Uuid }}"> {{ .Topic }} </a>
+                <a class="btn-link" href="/thread/read?id={{.Uuid }}"> {{ .Topic }} </a>
             </h3>
+            <div class="inaline">
+                {{ .Body }}
+            </div>
     </div>
     <div class="panel-footer">
            {{ .CreatedAtDate }}&nbsp;&nbsp;&nbsp;作者:&nbsp;{{ .User.Name }}&nbsp;&nbsp;&nbsp;评论数:&nbsp;{{ .NumReplies }}

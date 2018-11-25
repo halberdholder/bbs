@@ -12,9 +12,11 @@
   {{ end }}
 
   {{ if .Failed }}
-      <p class="text-danger">用户名或密码错误</p>
+      <p class="text-danger">&nbsp;&nbsp;&nbsp;用户名或密码错误</p>
+  {{ else }}
+      <br/>
   {{ end }}
-  <br/>
+
   <button class="btn btn-lg btn-primary btn-block" type="submit">登录</button>
   <br/>
   <a class="lead pull-right" href="/signup">注册</a>

@@ -5,46 +5,51 @@
 <div class="panel panel-default">
   <div class="panel-heading">
           <h3 class="panel-title bbs-title">
-                  <span class="bbs-pre">{{ .Topic }}</span>
+                  <span>{{ .Topic }}</span>
           </h3>
   </div>
   <div class="panel-footer">
         {{ .CreatedAtDate }}&nbsp;&nbsp;&nbsp;作者:&nbsp;{{ .User.Name }}&nbsp;&nbsp;&nbsp;评论数:&nbsp;{{ .NumReplies }}&nbsp;&nbsp;&nbsp;分类: 杂项
   </div>
 
-  <span class="bbs-pre bbs-body">{{ .Body | html }}</span>
+  {{ if .CompatibleNonCkeidtor }}
+  <div class="bbs-pre">{{ .Body | recogurl | html }}</div>
+  {{ else }}
+  <div class="bbs-text">{{ .Body | html }}</div>
+  {{ end }}
   
   {{ range .Posts }}
-  <div class="panel-body">
+  <div class="panel-footer">
           <span>
               <i class="fa fa-comment"></i>
               {{ .User.Name }}&nbsp;&nbsp;&nbsp;{{ .CreatedAtDate }}
           </span>
   </div>
 
-  <span class="bbs-pre bbs-body">{{ .Body | html }}</span>
+  {{ if .CompatibleNonCkeidtor }}
+  <div class="bbs-pre">{{ .Body | recogurl | html }}</div>
+  {{ else }}
+  <div class="bbs-text">{{ .Body | html }}</div>
+  {{ end }}
+
   {{ end }}    
 
 </div>
 
-
-  <div class="panel panel-info">
-    <div class="panel-body">
-     <form role="form" action="/thread/post" method="post">
-       <div class="form-group">
-         <textarea name="body" id="editor1" placeholder="Write your reply here" rows="4"></textarea>
+<h5><i class="fa fa-comment-o"></i>评论:</br></h5>
+<form role="form" action="/thread/post" method="post">
+    <div class="form-group">
+        <textarea name="body" id="editor1" placeholder="Write your reply here" rows="4"></textarea>
         <script>
-                CKEDITOR.replace('editor1', {
-                        language: 'zh-CN',//改成中文版
-                });
+            CKEDITOR.replace('editor1', {
+                    language: 'zh-CN',//改成中文版
+            });
         </script>
-         <br/>
-         <input type="hidden" name="uuid" value="{{ .Uuid }}">
-         <button class="btn btn-primary pull-right" type="submit">Reply</button>
-       </div>
-     </form>
-     </div>
-  </div>
+        <br/>
+        <input type="hidden" name="uuid" value="{{ .Uuid }}">
+        <button class="btn btn-primary pull-right" type="submit">提交</button>
+   </div>
+</form>
 
 
 
