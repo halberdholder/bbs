@@ -9,6 +9,7 @@ import (
 	"os"
 	"path/filepath"
 	"time"
+	"strconv"
 )
 
 // GET /err?msg=
@@ -24,17 +25,40 @@ func err(writer http.ResponseWriter, request *http.Request) {
 }
 
 func index(writer http.ResponseWriter, request *http.Request) {
-	threads, err := data.Threads()
+	if err := request.ParseForm(); err != nil {
+		danger(err, "Cannot prase form")
+	}
+	currentPage, err := strconv.ParseInt(request.FormValue("page"), 10, 64)
+	if currentPage == 0 || err != nil {
+		currentPage = 1
+	}
+
+	pageInfo := PageInfo {
+		CurrentPage: currentPage,
+	}
+
+	total, err := data.TotalThreads()
+	if  err != nil {
+		error_message(writer, request, "Cannot get total count of threads")
+		return
+	}
+	pageInfo.TotalThreads = total
+
+	threads, err := data.ThreadsByPage(currentPage, config.PageSize)
 	if err != nil {
 		error_message(writer, request, "Cannot get threads")
+		return
+	}
+	pageInfo.Threads = threads
+
+	pageInfo.Pagination()
+
+	_, err = session(writer, request)
+	if err != nil {
+		generateHTML(writer, pageInfo, "layout", "public.navbar", "index")
+		info("anonymous", request.Host, "visited")
 	} else {
-		_, err := session(writer, request)
-		if err != nil {
-			generateHTML(writer, threads, "layout", "public.navbar", "index")
-			info("anonymous", request.Host, "visited")
-		} else {
-			generateHTML(writer, threads, "layout", "private.navbar", "index")
-		}
+		generateHTML(writer, pageInfo, "layout", "private.navbar", "index")
 	}
 }
 

@@ -19,6 +19,8 @@ type Configuration struct {
 	WriteTimeout int64
 	Static       string
 	LogFile      string
+	PageSize 	 int64
+	MaxPageList  int64
 }
 
 var config Configuration

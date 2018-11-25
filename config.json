@@ -3,5 +3,7 @@
   "ReadTimeout"    : 10,
   "WriteTimeout"   : 600,
   "Static"         : "public",
-  "LogFile"        : "/var/log/chitchat.log"
+  "LogFile"        : "/var/log/chitchat.log",
+  "PageSize"       : 10,
+  "MaxPageList"    : 5
 }

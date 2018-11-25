@@ -1,20 +1,49 @@
 {{ define "content" }}
 
-{{ range . }}
-  <div class="panel panel-default">
+<div class="pull-right">
+
+{{ range .Threads }}
+<div class="panel panel-default">
     <div class="panel-heading">
-            <h3 class="panel-title bbs-title">
-                <i class="fa fa-comment-o pull-left"></i>
-                <a class="btn-link" href="/thread/read?id={{.Uuid }}"> {{ .Topic }} </a>
-            </h3>
-            <div class="inaline">
-                {{ .Body }}
-            </div>
+        <h3 class="panel-title bbs-title">
+            <i class="fa fa-comment-o pull-left"></i>
+            <a class="btn-link" href="/thread/read?id={{ .Uuid }}"> {{ .Topic }} </a>
+        </h3>
+        <div class="inaline">
+            {{ .Body }}
+        </div>
     </div>
     <div class="panel-footer">
-           {{ .CreatedAtDate }}&nbsp;&nbsp;&nbsp;作者:&nbsp;{{ .User.Name }}&nbsp;&nbsp;&nbsp;评论数:&nbsp;{{ .NumReplies }}
+        {{ .CreatedAtDate }}&nbsp;&nbsp;&nbsp;作者:&nbsp;{{ .User.Name }}&nbsp;&nbsp;&nbsp;评论数:&nbsp;{{ .NumReplies }}
     </div>
-  </div>
+</div>
 {{ end }}
+
+<ul class="pagination bbs-center">
+    <li><a href="/index?page={{ .Min }}">首页</a></li>
+
+    {{ if eq .Left .CurrentPage }}
+    <li class="disabled"><a href="/index?page={{ .Left }}">&laquo;</a></li>
+    {{ else }}
+    <li><a href="/index?page={{ .Left }}">&laquo;</a></li>
+    {{ end }}
+
+    {{ range . }}
+    {{ if eq . CurrentPage }}
+    <li class="active"><a href="/index?page={{ . }}">{{ . }}</a></li>
+    {{ else }}
+    <li><a href="/index?page={{ . }}">{{ . }}</a></li>
+    {{ end }}
+    {{ end }}
+
+    {{ if eq .Right .TotalPages }}
+    <li class="disabled"><a href="/index?page={{ .Right }}">&raquo;</a></li>
+    {{ else }}
+    <li><a href="/index?page={{ .Right }}">&raquo;</a></li>
+    {{ end }}
+
+    <li><a href="/index?page={{ .Max }}">尾页</a></li>
+</ul>
+</div>
 
 {{ end }}
