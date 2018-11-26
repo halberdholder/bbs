@@ -1,6 +1,27 @@
 {{ define "content" }}
 
+<div class="row">
 
+<div class="col-lg-2">
+        <h4 class="bbs-classborder"><i class="fa fa-circle-o-notch fa-spin"></i>分类</h4>
+        <ul class="nav nav-stacked">
+                <li><a class="btn-link" href='#'>杂项(1篇)</a></li>
+                <li><a class="btn-link" href='#'>杂项A(2篇)</a></li>
+                <li><a class="btn-link" href='#'>杂项B(22篇)</a></li>
+                <li><a class="btn-link" href='#'><i class="fa fa-plus"></i>新建</a></li>
+        </ul>    
+
+        </br>
+        <h4 class="bbs-classborder"><i class="fa fa-circle-o-notch fa-spin"></i>归档</h4>
+        <ul class="list-group">
+                <li class="list-group-item"><span class="badge">1篇</span>2018年1月</li>
+                <li class="list-group-item"><span class="badge">1篇</span>2018年2月</li>
+                <li class="list-group-item"><span class="badge">1篇</span>2018年3月</li>
+        </ul>
+
+</div>
+
+<div class="col-lg-10">
 
 {{ range .Threads }}
 <div class="panel panel-default">
@@ -40,7 +61,7 @@
 
     {{ end }}
 
-    {{ if eq .Right .TotalPages }}
+    {{ if eq .Right .CurrentPage }}
     <li class="disabled"><a href="/index?page={{ .Right }}">&raquo;</a></li>
     {{ else }}
     <li><a href="/index?page={{ .Right }}">&raquo;</a></li>
@@ -49,7 +70,9 @@
     <li><a href="/index?page={{ .Max }}">尾页</a></li>
 </ul>
 
+</div>
 
+</div>
 
 
 {{ end }}

@@ -11,7 +11,11 @@ import (
 func newThread(writer http.ResponseWriter, request *http.Request) {
 	_, err := session(writer, request)
 	if err != nil {
-		http.Redirect(writer, request, "/login", 302)
+		loginInfo := LoginInfo{
+			ThreadUuid: "new",
+		}
+		generateHTML(writer, &loginInfo, "login.layout", "public.navbar", "login")
+		//http.Redirect(writer, request, "/login", 302)
 	} else {
 		generateHTML(writer, nil, "layout", "private.navbar", "new.thread")
 	}

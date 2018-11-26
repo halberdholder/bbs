@@ -29,6 +29,7 @@ div pre {
   font-size: 16px !important;
 }
 
+
 /* CKeidtor输入的Body 未编排格式 */
 .bbs-text {
   padding: 10px 15px;
@@ -36,6 +37,7 @@ div pre {
 }
 
 
+/* 修改链接颜色为红色 */
 .btn-link:hover, .btn-link:focus, .btn-link:active, .btn-link.active, .open .dropdown-toggle.btn-link {
         color: red !important;
         border-color: #285e8e; /*set the color you want here*/
@@ -49,9 +51,20 @@ div pre {
         /*clip  修剪文本。*/ 
 }  
 
+/* 分页按钮居中 */
 .bbs-center {
     width: auto;
     display: table;
     margin-left: auto;
     margin-right: auto;
+}
+
+li a {
+  color: #666666 !important;
+}
+
+/* 分类边框 */
+.bbs-classborder {
+        border-left:5px solid #00bfff;
+        padding-left: 10px;
 }

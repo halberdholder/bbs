@@ -76,10 +76,13 @@ func authenticate(writer http.ResponseWriter, request *http.Request) {
 		}
 		http.SetCookie(writer, &cookie)
 
-		if threadUuid != "" {
-			http.Redirect(writer, request, "/thread/read?id="+threadUuid, 302)
-		} else {
+		switch threadUuid {
+		case "new":
+			http.Redirect(writer, request, "/thread/new", 302)
+		case "":
 			http.Redirect(writer, request, "/", 302)
+		default:
+			http.Redirect(writer, request, "/thread/read?id="+threadUuid, 302)
 		}
 		info("user", user.Email, "login success")
 	} else {

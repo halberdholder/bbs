@@ -26,8 +26,12 @@ CKEDITOR.editorConfig = function( config ) {
 		{ name: 'about' }
 	];
 
+    config.enterMode = CKEDITOR.ENTER_BR; 
+    config.shiftEnterMode = CKEDITOR.ENTER_P;
+
 	// Remove some buttons provided by the standard plugins, which are
 	// not needed in the Standard(s) toolbar.
+    config.removePlugins = 'elementspath';
 	config.removeButtons = 'Underline,Subscript,Superscript';
 
 	// Set the most common block elements.
@@ -40,4 +44,5 @@ CKEDITOR.editorConfig = function( config ) {
     config.filebrowserUploadUrl = '/ckeditorUpload?type=File';  
     config.filebrowserImageUploadUrl = "/ckeditorUpload?type=image";
     config.filebrowserUploadMethod = "form";
+
 };
