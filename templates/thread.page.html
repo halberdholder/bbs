@@ -1,0 +1,31 @@
+{{ define "pagelist" }}
+
+<ul class="pagination bbs-center">
+    <li><a href="/index?page={{ .Min }}">首页</a></li>
+
+    {{ if eq .Left .CurrentPage }}
+    <li class="disabled"><a href="/index?page={{ .Left }}">&laquo;</a></li>
+    {{ else }}
+    <li><a href="/index?page={{ .Left }}">&laquo;</a></li>
+    {{ end }}
+
+    {{ $currentPage := .CurrentPage }}
+
+    {{ range .PageList }}
+        {{ if eq . $currentPage }}
+        <li class="active"><a href="/index?page={{ . }}">{{ . }}</a></li>
+        {{ else }}
+        <li><a href="/index?page={{ . }}">{{ . }}</a></li>
+        {{ end }}
+    {{ end }}
+
+    {{ if eq .Right .CurrentPage }}
+    <li class="disabled"><a href="/index?page={{ .Right }}">&raquo;</a></li>
+    {{ else }}
+    <li><a href="/index?page={{ .Right }}">&raquo;</a></li>
+    {{ end }}
+
+    <li><a href="/index?page={{ .Max }}">尾页</a></li>
+</ul>
+
+{{ end }}

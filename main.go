@@ -38,6 +38,8 @@ func main() {
 	mux.HandleFunc("/thread/post", postThread)
 	mux.HandleFunc("/thread/read", readThread)
 
+	mux.HandleFunc("/class", threadClass)
+
 	// starting up the server
 	server := &http.Server{
 		Addr:           config.Address,

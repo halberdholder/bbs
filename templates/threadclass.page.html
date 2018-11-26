@@ -1,0 +1,31 @@
+{{ define "pagelist" }}
+
+<ul class="pagination bbs-center">
+    <li><a href="/class?id={{ .ThreadClass }}&page={{ .Min }}">首页</a></li>
+
+    {{ if eq .Left .CurrentPage }}
+    <li class="disabled"><a href="/class?id={{ .ThreadClass }}&page={{ .Left }}">&laquo;</a></li>
+    {{ else }}
+    <li><a href="/class?id={{ .ThreadClass }}&page={{ .Left }}">&laquo;</a></li>
+    {{ end }}
+
+    {{ $currentPage := .CurrentPage }}
+
+    {{ range .PageList }}
+        {{ if eq . $currentPage }}
+        <li class="active"><a href="/class?id={{ .ThreadClass }}&page={{ . }}">{{ . }}</a></li>
+        {{ else }}
+        <li><a href="/class?id={{ .ThreadClass }}&page={{ . }}">{{ . }}</a></li>
+        {{ end }}
+    {{ end }}
+
+    {{ if eq .Right .CurrentPage }}
+    <li class="disabled"><a href="/class?id={{ .ThreadClass }}&page={{ .Right }}">&raquo;</a></li>
+    {{ else }}
+    <li><a href="/class?id={{ .ThreadClass }}&page={{ .Right }}">&raquo;</a></li>
+    {{ end }}
+
+    <li><a href="/class?id={{ .ThreadClass }}&page={{ .Max }}">尾页</a></li>
+</ul>
+
+{{ end }}

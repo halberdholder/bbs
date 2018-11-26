@@ -83,7 +83,7 @@ func parseTemplateFiles(filenames ...string) (t *template.Template) {
 	return
 }
 
-func generateHTML(writer http.ResponseWriter, data interface{}, filenames ...string) {
+func generateHTML(writer http.ResponseWriter, d interface{}, filenames ...string) {
 	var files []string
 	for _, file := range filenames {
 		files = append(files, fmt.Sprintf("templates/%s.html", file))
@@ -92,11 +92,12 @@ func generateHTML(writer http.ResponseWriter, data interface{}, filenames ...str
 	funcMap := template.FuncMap{
 		"recogurl": recogURL,
 		"html":     unescaped,
+		"threadclassinfo" : data.GetThreadClassInfo,
 	}
 
 	templates := template.New("layout.html").Funcs(funcMap)
 	templates = template.Must(templates.ParseFiles(files...))
-	templates.ExecuteTemplate(writer, "layout", data)
+	templates.ExecuteTemplate(writer, "layout", d)
 }
 
 func recogURL(body string) string {

@@ -55,10 +55,10 @@ func index(writer http.ResponseWriter, request *http.Request) {
 
 	_, err = session(writer, request)
 	if err != nil {
-		generateHTML(writer, pageInfo, "layout", "public.navbar", "index")
+		generateHTML(writer, pageInfo, "layout", "public.navbar", "index", "thread.page")
 		info("anonymous", request.Host, "visited")
 	} else {
-		generateHTML(writer, pageInfo, "layout", "private.navbar", "index")
+		generateHTML(writer, pageInfo, "layout", "private.navbar", "index", "thread.page")
 	}
 }
 

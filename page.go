@@ -5,6 +5,7 @@ import (
 )
 
 type PageInfo struct {
+	ThreadClass  int64
 	TotalThreads int64
 	CurrentPage  int64
 	Min          int64
