@@ -1,9 +1,12 @@
 {
-  "Address"        : ":8001",
+  "Address"        : ":80",
   "ReadTimeout"    : 10,
   "WriteTimeout"   : 600,
   "Static"         : "public",
   "LogFile"        : "/var/log/chitchat.log",
   "PageSize"       : 10,
-  "MaxPageList"    : 5
+  "MaxPageList"    : 5,
+  "TLSAddress"     : ":443",
+  "TLSkey"         : "/etc/chitchat/key.pem",
+  "TLSCert"        : "/etc/chitchat/cert.pem"
 }

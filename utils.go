@@ -19,8 +19,11 @@ type Configuration struct {
 	WriteTimeout int64
 	Static       string
 	LogFile      string
-	PageSize 	 int64
+	PageSize     int64
 	MaxPageList  int64
+	TLSAddress   string
+	TLSKey       string
+	TLSCert      string
 }
 
 var config Configuration
@@ -33,6 +36,7 @@ func p(a ...interface{}) {
 
 func init() {
 	loadConfig()
+
 	file, err := os.OpenFile(config.LogFile, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
 		log.Fatalln("Failed to open log file", err)
@@ -90,10 +94,10 @@ func generateHTML(writer http.ResponseWriter, d interface{}, filenames ...string
 	}
 
 	funcMap := template.FuncMap{
-		"recogurl": recogURL,
-		"html":     unescaped,
+		"recogurl":        recogURL,
+		"html":            unescaped,
 		"threadclassinfo": data.GetThreadClassInfo,
-		"threadarchived": data.ThreadArchived,
+		"threadarchived":  data.ThreadArchived,
 	}
 
 	templates := template.New("layout.html").Funcs(funcMap)

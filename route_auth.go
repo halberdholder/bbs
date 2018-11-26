@@ -9,6 +9,7 @@ import (
 type LoginInfo struct {
 	ThreadUuid string
 	Failed     bool
+	Admin      bool
 }
 
 // GET /login
@@ -18,14 +19,15 @@ func login(writer http.ResponseWriter, request *http.Request) {
 		danger(err, "Cannot prase form")
 	}
 
-	failed, _ := strconv.ParseBool(request.FormValue("failed"))
+	isFailed, _ := strconv.ParseBool(request.FormValue("failed"))
 
 	loginInfo := LoginInfo{
 		ThreadUuid: request.FormValue("uuid"),
-		Failed:     failed,
+		Failed:     isFailed,
+		Admin:      false,
 	}
 
-	generateHTML(writer, loginInfo, "login.layout", "public.navbar", "login")
+	generateHTML(writer, loginInfo, "login.layout", "login")
 }
 
 // GET /signup
