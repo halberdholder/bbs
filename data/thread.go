@@ -2,7 +2,7 @@ package data
 
 import (
 	"time"
-)
+	)
 
 type Thread struct {
 	Id        int
@@ -10,6 +10,7 @@ type Thread struct {
 	Topic     string
 	Body      string
 	UserId    int
+	ClassName string
 	CreatedAt time.Time
 }
 
@@ -64,14 +65,14 @@ func (thread *Thread) Posts() (posts []Post, err error) {
 }
 
 // Create a new thread
-func (user *User) CreateThread(topic, body string) (conv Thread, err error) {
-	statement := "insert into threads (uuid, topic, body, user_id, created_at) values (?, ?, ?, ?, ?)"
+func (user *User) CreateThread(topic, body string, classId int64) (conv Thread, err error) {
+	statement := "insert into threads (uuid, topic, body, user_id, class_id, created_at) values (?, ?, ?, ?, ?, ?)"
 	stmt, _ := Db.Prepare(statement)
 	defer stmt.Close()
 
 	uuid := createUUID()
 	// use QueryRow to return a row and scan the returned id into the Session struct
-	_, err = stmt.Exec(uuid, topic, body, user.Id, time.Now())
+	_, err = stmt.Exec(uuid, topic, body, user.Id, classId, time.Now())
 	if err != nil {
 		return
 	}
@@ -97,7 +98,11 @@ func (user *User) CreatePost(conv Thread, body string) (post Post, err error) {
 
 // Get all threads in the database and returns it
 func Threads() (threads []Thread, err error) {
-	rows, err := Db.Query("SELECT id, uuid, topic, body, user_id, created_at FROM threads ORDER BY created_at DESC")
+	rows, err := Db.Query(
+		"SELECT t.id, t.uuid, t.topic, t.body, t.user_id, c.name, t.created_at " +
+			"FROM threads t, thread_class c " +
+			"WHERE t.class_id = c.id " +
+			"ORDER BY created_at DESC")
 	defer rows.Close()
 	if err != nil {
 		return
@@ -115,8 +120,11 @@ func Threads() (threads []Thread, err error) {
 // Get a thread by the UUID
 func ThreadByUUID(uuid string) (conv Thread, err error) {
 	conv = Thread{}
-	err = Db.QueryRow("SELECT id, uuid, topic, body, user_id, created_at FROM threads WHERE uuid = ?", uuid).
-		Scan(&conv.Id, &conv.Uuid, &conv.Topic, &conv.Body, &conv.UserId, &conv.CreatedAt)
+	err = Db.QueryRow(
+		"SELECT t.id, t.uuid, t.topic, t.body, t.user_id, c.name, t.created_at " +
+			"FROM threads t, thread_class c " +
+			"WHERE t.uuid = ? and t.class_id = c.id", uuid).
+		Scan(&conv.Id, &conv.Uuid, &conv.Topic, &conv.Body, &conv.UserId, &conv.ClassName, &conv.CreatedAt)
 	return
 }
 
@@ -181,4 +189,26 @@ func (post *Post) CompatibleNonCkeidtor() (b bool) {
 	}
 
 	return false
+}
+
+type ThreadArchive struct {
+	Month	string
+	Count 	int64
+}
+
+func ThreadArchived() (t []ThreadArchive) {
+	rows, err := Db.Query(
+		"select DATE_FORMAT(created_at,'%Y年%m月') months, count(id) count from threads group by months")
+	defer rows.Close()
+	if err != nil {
+		return
+	}
+	for rows.Next() {
+		conv := ThreadArchive{}
+		if err = rows.Scan(&conv.Month, &conv.Count); err != nil {
+			return
+		}
+		t = append(t, conv)
+	}
+	return
 }

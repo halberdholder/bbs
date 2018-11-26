@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/halberdholder/bbs/data"
 	"net/http"
+	"strconv"
 )
 
 // GET /threads/new
@@ -38,8 +39,9 @@ func createThread(writer http.ResponseWriter, request *http.Request) {
 		}
 		topic := request.PostFormValue("topic")
 		body := request.PostFormValue("body")
+		classId, _ := strconv.ParseInt(request.PostFormValue("threadclass"), 10, 64)
 		if topic != "" {
-			if _, err := user.CreateThread(topic, body); err != nil {
+			if _, err := user.CreateThread(topic, body, classId); err != nil {
 				danger(err, "Cannot create thread")
 			}
 		}

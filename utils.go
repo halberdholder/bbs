@@ -92,7 +92,8 @@ func generateHTML(writer http.ResponseWriter, d interface{}, filenames ...string
 	funcMap := template.FuncMap{
 		"recogurl": recogURL,
 		"html":     unescaped,
-		"threadclassinfo" : data.GetThreadClassInfo,
+		"threadclassinfo": data.GetThreadClassInfo,
+		"threadarchived": data.ThreadArchived,
 	}
 
 	templates := template.New("layout.html").Funcs(funcMap)

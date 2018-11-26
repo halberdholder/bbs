@@ -10,12 +10,13 @@
     {{ end }}
 
     {{ $currentPage := .CurrentPage }}
+    {{ $threadClass := .ThreadClass}}
 
     {{ range .PageList }}
         {{ if eq . $currentPage }}
-        <li class="active"><a href="/class?id={{ .ThreadClass }}&page={{ . }}">{{ . }}</a></li>
+        <li class="active"><a href="/class?id={{ $threadClass }}&page={{ . }}">{{ . }}</a></li>
         {{ else }}
-        <li><a href="/class?id={{ .ThreadClass }}&page={{ . }}">{{ . }}</a></li>
+        <li><a href="/class?id={{ $threadClass }}&page={{ . }}">{{ . }}</a></li>
         {{ end }}
     {{ end }}
 
