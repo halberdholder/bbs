@@ -8,13 +8,13 @@
             {{ range threadclassinfo }}
              <li><a class="btn-link" href='/class?id={{ .Id }}'>{{ .Name }}({{ .ThreadCount }}篇)</a></li>
             {{ end }}
-             <li><a class="btn-link" href='#'><i class="fa fa-plus"></i>新建</a></li>
+             <li><a class="btn-link" href='#'><i class="fa fa-plus"></i>添加分类</a></li>
         </ul>
 
         </br>
         <h4 class="bbs-classborder"><i class="fa fa-circle-o-notch fa-spin"></i>归档</h4>
         <ul class="list-group">
-            {{ range .threadArchived }}
+            {{ range threadarchived }}
             <li class="list-group-item"><span class="badge">{{ .Count }}篇</span>{{ .Month }}</li>
             {{ end }}
         </ul>
