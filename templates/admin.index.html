@@ -16,9 +16,9 @@
                 <div class="col-sm-4">
                     <p class="text-right">
                     {{ if $perm.CanDelThreadClass }}
-                        <a href="/delthreadclass?id={{ .Id }}"><i class="fa fa-minus"></i></a>
+                        <a href="/delthreadclass?id={{ .Id }}"><i class="fa fa-lg fa-minus-circle"></i></a>
                     {{ else }}
-                        <a href="#"><i class="fa fa-minus"></i></a>
+                        <a href="#"><i class="fa fa-minus-circle"></i></a>
                     {{ end }}
                     </p>
                 </div>
@@ -27,12 +27,12 @@
 
             <form role="form" action="/addthreadclass" method="post">
                 <div class="form-group">
-                    <input type="text" class="form-control" id="name" placeholder="请输入类名">
+                    <input type="text" class="form-control" name="name" id="name" placeholder="请输入类名">
                 </div>
                 {{ if $perm.CanAddThreadClass }}
-                    <button type="submit" class="btn btn-link"><i class="fa fa-plus"></i>添加分类</button>
+                    <button type="submit" class="btn-link"><i class="fa fa-plus"></i>添加分类</button>
                 {{ else }}
-                    <button type="submit" class="btn btn-link disabled"><i class="fa fa-plus"></i>添加分类</button>
+                    <button type="submit" class="btn-link disabled"><i class="fa fa-plus"></i>添加分类</button>
                 {{ end }}
             </form>
         </ul>
@@ -63,6 +63,7 @@
             {{ .CreatedAtDate }}&nbsp;&nbsp;&nbsp;作者:&nbsp;{{ .User.Name }}&nbsp;&nbsp;&nbsp;评论数:&nbsp;{{ .NumReplies }}
             </div>
 
+            <div class="bbs-btn-right">
             <div class="btn-group btn-group-sm">
                 <div class="btn-group btn-group-sm">
                     <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
@@ -87,7 +88,7 @@
                 <a type="button" class="btn btn-danger" href="#">删 除</a>
                 {{ end }}
             </div>
-            <hr>
+            </div>
         </div>
     {{ end }}
 

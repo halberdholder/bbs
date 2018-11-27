@@ -3,16 +3,17 @@ package data
 import "strconv"
 
 type ThreadClassInfo struct {
-		Id			int64
-		Name 		string
-		ThreadCount string
+	Id          int64
+	Name        string
+	ThreadCount string
 }
 
 func GetThreadClassInfo() (tci []ThreadClassInfo) {
 	rows, err := Db.Query(
-		"select tc.id, tc.name, t.count " +
-			"from thread_class as tc, (select class_id, count(*) as count from threads group by class_id) as t " +
-			"where tc.id=t.class_id")
+		"select tc.id, tc.name, ifnull(t.count, 0) " +
+			"from thread_class as tc " +
+			"left join (select class_id, count(*) as count from threads group by class_id) t " +
+			"on tc.id=t.class_id order by tc.id desc")
 	defer rows.Close()
 	if err != nil {
 		return
@@ -34,9 +35,9 @@ func TotalThreadsOfClass(classId int64) (total int64, err error) {
 
 func ThreadsByClassAndPage(classId, CurrentPage, PageSize int64) (threads []Thread, err error) {
 	rows, err := Db.Query(
-		"SELECT id, uuid, topic, body, user_id, created_at FROM threads " +
-			"WHERE class_id = ? " +
-			"ORDER BY created_at DESC " +
+		"SELECT id, uuid, topic, body, user_id, created_at FROM threads "+
+			"WHERE class_id = ? "+
+			"ORDER BY created_at DESC "+
 			"LIMIT ?, ?", classId, (CurrentPage-1)*PageSize, PageSize)
 	defer rows.Close()
 	if err != nil {
@@ -53,6 +54,9 @@ func ThreadsByClassAndPage(classId, CurrentPage, PageSize int64) (threads []Thre
 }
 
 func AddThreadClass(name string) (err error) {
+	if len(name) <= 0 {
+		return nil
+	}
 	statement := "insert into thread_class(name) values(?)"
 	stmt, _ := Db.Prepare(statement)
 	defer stmt.Close()

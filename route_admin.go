@@ -1,9 +1,9 @@
 package main
 
 import (
+	"github.com/halberdholder/bbs/data"
 	"net/http"
 	"strconv"
-	"github.com/halberdholder/bbs/data"
 )
 
 type Permission int
@@ -17,7 +17,7 @@ const (
 
 type AdminPageInfo struct {
 	PageInfo
-	Perm  Permission
+	Perm Permission
 }
 
 func adminErr(writer http.ResponseWriter, request *http.Request) {
@@ -47,7 +47,7 @@ func adminLogin(writer http.ResponseWriter, request *http.Request) {
 func adminAuthenticate(writer http.ResponseWriter, request *http.Request) {
 	err := request.ParseForm()
 	user, err := data.UserByEmail(request.PostFormValue("email"))
-	if err != nil || !isAdministrator(user){
+	if err != nil || !isAdministrator(user) {
 		redirectLogin(writer)
 		return
 	}
@@ -65,8 +65,8 @@ func adminAuthenticate(writer http.ResponseWriter, request *http.Request) {
 	}
 
 	cookie := http.Cookie{
-		Name:     "admin_cookie",
-		Value:    session.Uuid,
+		Name:  "admin_cookie",
+		Value: session.Uuid,
 	}
 	http.SetCookie(writer, &cookie)
 
@@ -96,7 +96,7 @@ func adminIndex(writer http.ResponseWriter, request *http.Request) {
 	}
 
 	adminPageInfo := AdminPageInfo{
-		PageInfo:    PageInfo{
+		PageInfo: PageInfo{
 			CurrentPage: currentPage,
 		},
 	}
@@ -139,7 +139,7 @@ func adminClass(writer http.ResponseWriter, request *http.Request) {
 		currentPage = 1
 	}
 	adminPageInfo := AdminPageInfo{
-		PageInfo:    PageInfo{
+		PageInfo: PageInfo{
 			CurrentPage: currentPage,
 		},
 	}
@@ -152,7 +152,7 @@ func adminClass(writer http.ResponseWriter, request *http.Request) {
 	adminPageInfo.ThreadClass = threadClassId
 
 	total, err := data.TotalThreadsOfClass(adminPageInfo.ThreadClass)
-	if  err != nil {
+	if err != nil {
 		error_message(writer, request, "Cannot get total count of threads")
 		return
 	}
@@ -167,10 +167,10 @@ func adminClass(writer http.ResponseWriter, request *http.Request) {
 
 	adminPageInfo.Pagination()
 	adminPageInfo.Perm = Permission(user.Permission)
-	generateHTML(writer, adminPageInfo, "layout", "admin.navbar", "index", "threadclass.page")
+	generateHTML(writer, adminPageInfo, "layout", "admin.navbar", "admin.index", "threadclass.page")
 }
 
-func addThreadClass (writer http.ResponseWriter, request *http.Request) {
+func addThreadClass(writer http.ResponseWriter, request *http.Request) {
 	sess, err := session(request, "admin_cookie")
 	if err != nil {
 		redirectLogin(writer)
@@ -270,7 +270,15 @@ func adminLogout(writer http.ResponseWriter, request *http.Request) {
 	} else {
 		warning(err, "Failed to get cookie")
 	}
-	http.Redirect(writer, request, "/", 302)
+
+	if err := request.ParseForm(); err != nil {
+		danger(err, "Cannot prase form")
+	}
+	if request.FormValue("index") == "true" {
+		http.Redirect(writer, request, "http://"+config.PubAddr, 302)
+	} else {
+		http.Redirect(writer, request, "/", 302)
+	}
 }
 
 func (p Permission) CanAddThreadClass() bool {
@@ -296,10 +304,10 @@ func isAdministrator(user data.User) bool {
 
 func redirectLogin(w http.ResponseWriter) {
 	loginInfo := LoginInfo{
-		Failed:     true,
-		Admin:		true,
+		Failed: true,
+		Admin:  true,
 	}
-	generateHTML(w, loginInfo, "login.layout", "login")
+	loginInfo.Redirect(w)
 }
 
 func PubAddress() string {

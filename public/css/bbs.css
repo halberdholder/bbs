@@ -66,6 +66,10 @@ div pre {
     transform: translateY(-20%);
 }
 
+.bbs-btn-right {
+    text-align:right;
+}
+
 li a {
   color: #666666 !important;
 }

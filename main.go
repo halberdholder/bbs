@@ -48,9 +48,7 @@ func httpServer() {
 		WriteTimeout:   time.Duration(config.WriteTimeout * int64(time.Second)),
 		MaxHeaderBytes: 1 << 20,
 	}
-	server.ListenAndServe()
-
-	//wg.Done()
+	danger(server.ListenAndServe())
 }
 
 func httpsServer() {
@@ -101,14 +99,15 @@ func httpsServer() {
 		WriteTimeout:   time.Duration(config.WriteTimeout * int64(time.Second)),
 		MaxHeaderBytes: 1 << 20,
 	}
-	server.ListenAndServeTLS(config.TLSCert, config.TLSKey)
+	danger(server.ListenAndServeTLS(config.TLSCert, config.TLSKey))
 }
 
 func main() {
-	p("ChitChat", version(), "started at", config.Address)
+	p("ChitChat", version(), "started at", config.Address, "and", config.TLSAddress)
 
 	go httpServer()
-	go httpServer()
+	go httpsServer()
 
 	select {}
+	p("ChitChat", version(), "stoped", time.Now())
 }

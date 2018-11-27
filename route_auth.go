@@ -12,6 +12,10 @@ type LoginInfo struct {
 	Admin      bool
 }
 
+func (loginInfo LoginInfo) Redirect(w http.ResponseWriter) {
+	generateHTML(w, loginInfo, "login.layout", "login")
+}
+
 // GET /login
 // Show the login page
 func login(writer http.ResponseWriter, request *http.Request) {
@@ -61,41 +65,50 @@ func signupAccount(writer http.ResponseWriter, request *http.Request) {
 // Authenticate the user given the email and password
 func authenticate(writer http.ResponseWriter, request *http.Request) {
 	err := request.ParseForm()
+	threadUuid := request.PostFormValue("uuid")
+	loginInfo := LoginInfo{
+		ThreadUuid: threadUuid,
+		Failed:     true,
+	}
 	user, err := data.UserByEmail(request.PostFormValue("email"))
 	if err != nil {
+		loginInfo.Redirect(writer)
 		danger(err, "Cannot find user")
+		return
 	}
-	threadUuid := request.PostFormValue("uuid")
-	if user.Password == data.Encrypt(request.PostFormValue("password")) {
-		session, err := user.CreateSession()
-		if err != nil {
-			danger(err, "Cannot create session")
-		}
-		cookie := http.Cookie{
-			Name:     "_cookie",
-			Value:    session.Uuid,
-			HttpOnly: true,
-		}
-		http.SetCookie(writer, &cookie)
 
-		switch threadUuid {
-		case "new":
-			http.Redirect(writer, request, "/thread/new", 302)
-		case "":
-			http.Redirect(writer, request, "/", 302)
-		default:
-			http.Redirect(writer, request, "/thread/read?id="+threadUuid, 302)
-		}
-		info("user", user.Email, "login success")
-	} else {
-		loginInfo := LoginInfo{
-			ThreadUuid: threadUuid,
-			Failed:     true,
-		}
-
-		generateHTML(writer, loginInfo, "login.layout", "public.navbar", "login")
-		info("user", user.Email, "login failed")
+	if isAdministrator(user) {
+		loginInfo.Redirect(writer)
+		info("Administrotor cannot login normal site")
+		return
 	}
+
+	if user.Password != data.Encrypt(request.PostFormValue("password")) {
+		loginInfo.Redirect(writer)
+		info("user", user.Email, "password error, login failed")
+		return
+	}
+
+	session, err := user.CreateSession()
+	if err != nil {
+		danger(err, "Cannot create session")
+	}
+	cookie := http.Cookie{
+		Name:     "_cookie",
+		Value:    session.Uuid,
+		HttpOnly: true,
+	}
+	http.SetCookie(writer, &cookie)
+
+	switch threadUuid {
+	case "new":
+		http.Redirect(writer, request, "/thread/new", 302)
+	case "":
+		http.Redirect(writer, request, "/", 302)
+	default:
+		http.Redirect(writer, request, "/thread/read?id="+threadUuid, 302)
+	}
+	info("user", user.Email, "login success")
 }
 
 // GET /logout
