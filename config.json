@@ -8,5 +8,6 @@
   "MaxPageList"    : 5,
   "TLSAddress"     : ":443",
   "TLSkey"         : "/etc/chitchat/key.pem",
-  "TLSCert"        : "/etc/chitchat/cert.pem"
+  "TLSCert"        : "/etc/chitchat/cert.pem",
+  "PubAddr"        : "127.0.0.1"
 }

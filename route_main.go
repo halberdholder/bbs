@@ -16,7 +16,7 @@ import (
 // shows the error message page
 func err(writer http.ResponseWriter, request *http.Request) {
 	vals := request.URL.Query()
-	_, err := session(writer, request)
+	_, err := session(request, "_cookie")
 	if err != nil {
 		generateHTML(writer, vals.Get("msg"), "layout", "public.navbar", "error")
 	} else {
@@ -53,7 +53,7 @@ func index(writer http.ResponseWriter, request *http.Request) {
 
 	pageInfo.Pagination()
 
-	_, err = session(writer, request)
+	_, err = session(request, "_cookie")
 	if err != nil {
 		generateHTML(writer, pageInfo, "layout", "public.navbar", "index", "thread.page")
 		info("anonymous", request.Host, "visited")

@@ -1,0 +1,99 @@
+{{ define "content" }}
+
+<div class="row">
+
+    {{ $perm := .Perm }}
+    {{ $tci := threadclassinfo }}
+
+    <div class="col-lg-2">
+        <h4 class="bbs-classborder"><i class="fa fa-circle-o-notch fa-spin"></i>分类</h4>
+        <ul class="nav nav-stacked">
+            <div class="row">
+            {{ range $tci }}
+                <div class="col-sm-8" style="padding-left:30px">
+                    <li><a class="btn-link" href='/class?id={{ .Id }}'>{{ .Name }}({{ .ThreadCount }}篇)</a></li>
+                </div>
+                <div class="col-sm-4">
+                    <p class="text-right">
+                    {{ if $perm.CanDelThreadClass }}
+                        <a href="/delthreadclass?id={{ .Id }}"><i class="fa fa-minus"></i></a>
+                    {{ else }}
+                        <a href="#"><i class="fa fa-minus"></i></a>
+                    {{ end }}
+                    </p>
+                </div>
+            {{ end }}
+            </div>
+
+            <form role="form" action="/addthreadclass" method="post">
+                <div class="form-group">
+                    <input type="text" class="form-control" id="name" placeholder="请输入类名">
+                </div>
+                {{ if $perm.CanAddThreadClass }}
+                    <button type="submit" class="btn btn-link"><i class="fa fa-plus"></i>添加分类</button>
+                {{ else }}
+                    <button type="submit" class="btn btn-link disabled"><i class="fa fa-plus"></i>添加分类</button>
+                {{ end }}
+            </form>
+        </ul>
+
+        </br>
+        <h4 class="bbs-classborder"><i class="fa fa-circle-o-notch fa-spin"></i>归档</h4>
+        <ul class="list-group">
+        {{ range threadarchived }}
+            <li class="list-group-item"><span class="badge">{{ .Count }}篇</span>{{ .Month }}</li>
+        {{ end }}
+        </ul>
+    </div>
+
+    <div class="col-lg-10">
+    {{ range .Threads }}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title bbs-title">
+                    <i class="fa fa-comment-o pull-left"></i>
+                    <!-- <a class="btn-link" href="/thread/read?id={{ .Uuid }}"> {{ .Topic }} </a> -->
+                    {{ .Topic }}
+                </h3>
+                <div class="inaline">
+                {{ .Body }}
+                </div>
+            </div>
+            <div class="panel-footer">
+            {{ .CreatedAtDate }}&nbsp;&nbsp;&nbsp;作者:&nbsp;{{ .User.Name }}&nbsp;&nbsp;&nbsp;评论数:&nbsp;{{ .NumReplies }}
+            </div>
+
+            <div class="btn-group btn-group-sm">
+                <div class="btn-group btn-group-sm">
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                        分 类&nbsp;&nbsp;<span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                    {{ $uuid := .Uuid }}
+                    {{ range $tci }}
+                        <li>
+                            {{ if $perm.CanModThreadClass }}
+                            <a href="/modthreadclass?id={{ $uuid }}&class={{ .Id }}">{{ .Name }}</a>
+                            {{ else }}
+                            <a href="#">{{ .Name }}</a>
+                            {{ end }}
+                        </li>
+                    {{ end }}
+                    </ul>
+                </div>
+                {{ if $perm.CanDelThread }}
+                <a type="button" class="btn btn-danger" href="/delthread?id={{ .Uuid }}">删 除</a>
+                {{ else }}
+                <a type="button" class="btn btn-danger" href="#">删 除</a>
+                {{ end }}
+            </div>
+            <hr>
+        </div>
+    {{ end }}
+
+    {{ template "pagelist" . }}
+    </div>
+
+</div>
+
+{{ end }}

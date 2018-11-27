@@ -11,7 +11,7 @@ import (
 	"os"
 	"regexp"
 	"strings"
-)
+	)
 
 type Configuration struct {
 	Address      string
@@ -24,6 +24,7 @@ type Configuration struct {
 	TLSAddress   string
 	TLSKey       string
 	TLSCert      string
+	PubAddr		 string
 }
 
 var config Configuration
@@ -64,8 +65,8 @@ func error_message(writer http.ResponseWriter, request *http.Request, msg string
 }
 
 // Checks if the user is logged in and has a session, if not err is not nil
-func session(writer http.ResponseWriter, request *http.Request) (sess data.Session, err error) {
-	cookie, err := request.Cookie("_cookie")
+func session(request *http.Request, cookName string) (sess data.Session, err error) {
+	cookie, err := request.Cookie(cookName)
 	if err == nil {
 		sess = data.Session{Uuid: cookie.Value}
 		if ok, _ := sess.Check(); !ok {
@@ -98,6 +99,7 @@ func generateHTML(writer http.ResponseWriter, d interface{}, filenames ...string
 		"html":            unescaped,
 		"threadclassinfo": data.GetThreadClassInfo,
 		"threadarchived":  data.ThreadArchived,
+		"pubaddr":		   PubAddress,
 	}
 
 	templates := template.New("layout.html").Funcs(funcMap)

@@ -96,7 +96,6 @@ func authenticate(writer http.ResponseWriter, request *http.Request) {
 		generateHTML(writer, loginInfo, "login.layout", "public.navbar", "login")
 		info("user", user.Email, "login failed")
 	}
-
 }
 
 // GET /logout

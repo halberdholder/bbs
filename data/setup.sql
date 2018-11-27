@@ -14,6 +14,7 @@ create table users (
   name       varchar(255),
   email      varchar(255) not null unique,
   password   varchar(255) not null,
+  permission int default 0,
   created_at timestamp not null
 ) engine=innodb default charset=utf8;
 

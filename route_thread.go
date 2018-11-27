@@ -10,7 +10,7 @@ import (
 // GET /threads/new
 // Show the new thread form page
 func newThread(writer http.ResponseWriter, request *http.Request) {
-	_, err := session(writer, request)
+	_, err := session(request, "_cookie")
 	if err != nil {
 		loginInfo := LoginInfo{
 			ThreadUuid: "new",
@@ -25,7 +25,7 @@ func newThread(writer http.ResponseWriter, request *http.Request) {
 // POST /signup
 // Create the user account
 func createThread(writer http.ResponseWriter, request *http.Request) {
-	sess, err := session(writer, request)
+	sess, err := session(request, "_cookie")
 	if err != nil {
 		http.Redirect(writer, request, "/login", 302)
 	} else {
@@ -58,7 +58,7 @@ func readThread(writer http.ResponseWriter, request *http.Request) {
 	if err != nil {
 		error_message(writer, request, "Cannot read thread")
 	} else {
-		_, err := session(writer, request)
+		_, err := session(request, "_cookie")
 		if err != nil {
 			generateHTML(writer, &thread, "layout", "public.navbar", "public.thread")
 		} else {
@@ -70,7 +70,7 @@ func readThread(writer http.ResponseWriter, request *http.Request) {
 // POST /thread/post
 // Create the post
 func postThread(writer http.ResponseWriter, request *http.Request) {
-	sess, err := session(writer, request)
+	sess, err := session(request, "_cookie")
 	if err != nil {
 		http.Redirect(writer, request, "/login", 302)
 	} else {

@@ -11,6 +11,7 @@ type User struct {
 	Email     string
 	Password  string
 	CreatedAt time.Time
+	Permission int
 }
 
 type Session struct {
@@ -79,8 +80,9 @@ func (session *Session) DeleteByUUID() (err error) {
 // Get the user from the session
 func (session *Session) User() (user User, err error) {
 	user = User{}
-	err = Db.QueryRow("SELECT id, uuid, name, email, created_at FROM users WHERE id = ?", session.UserId).
-		Scan(&user.Id, &user.Uuid, &user.Name, &user.Email, &user.CreatedAt)
+	err = Db.QueryRow(
+		"SELECT id, uuid, name, email, permission, created_at FROM users WHERE id = ?", session.UserId).
+		Scan(&user.Id, &user.Uuid, &user.Name, &user.Email, &user.Permission, &user.CreatedAt)
 	return
 }
 
@@ -157,8 +159,9 @@ func Users() (users []User, err error) {
 // Get a single user given the email
 func UserByEmail(email string) (user User, err error) {
 	user = User{}
-	err = Db.QueryRow("SELECT id, uuid, name, email, password, created_at FROM users WHERE email = ?", email).
-		Scan(&user.Id, &user.Uuid, &user.Name, &user.Email, &user.Password, &user.CreatedAt)
+	err = Db.QueryRow(
+		"SELECT id, uuid, name, email, password, permission, created_at FROM users WHERE email = ?", email).
+		Scan(&user.Id, &user.Uuid, &user.Name, &user.Email, &user.Password, &user.Permission, &user.CreatedAt)
 	return
 }
 

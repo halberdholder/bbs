@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-func httpserver() {
+func httpServer() {
 	//func httpserver(wg *sync.WaitGroup) {
 	// handle static assets
 	mux := http.NewServeMux()
@@ -19,6 +19,7 @@ func httpserver() {
 
 	// index
 	mux.HandleFunc("/", index)
+	mux.HandleFunc("/index", index)
 	// error
 	mux.HandleFunc("/err", err)
 
@@ -52,7 +53,7 @@ func httpserver() {
 	//wg.Done()
 }
 
-func httpsserver() {
+func httpsServer() {
 	// handle static assets
 	mux := http.NewServeMux()
 	files := http.FileServer(http.Dir(config.Static))
@@ -64,15 +65,22 @@ func httpsserver() {
 	//
 
 	// index and login
-	mux.HandleFunc("/", adminlogin)
+	mux.HandleFunc("/", adminLogin)
 	// error
-	mux.HandleFunc("/err", err)
+	mux.HandleFunc("/err", adminErr)
 
 	// defined in route_auth.go
-	mux.HandleFunc("/authenticate", authenticate)
+	mux.HandleFunc("/authenticate", adminAuthenticate)
+	mux.HandleFunc("/index", adminIndex)
+	mux.HandleFunc("/class", adminClass)
+	mux.HandleFunc("/logout", adminLogout)
 
+	mux.HandleFunc("/addthreadclass", addThreadClass)
+	mux.HandleFunc("/delthreadclass", delThreadClass)
+	mux.HandleFunc("/modthreadclass", modThreadClass)
+	mux.HandleFunc("/delthread", delThread)
 	/*
-		mux.HandleFunc("/logout", logout)
+
 		mux.HandleFunc("/signup", signup)
 		mux.HandleFunc("/signup_account", signupAccount)
 
@@ -99,8 +107,8 @@ func httpsserver() {
 func main() {
 	p("ChitChat", version(), "started at", config.Address)
 
-	go httpserver()
-	go httpsserver()
+	go httpServer()
+	go httpServer()
 
 	select {}
 }

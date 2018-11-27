@@ -42,7 +42,7 @@ func threadClass(writer http.ResponseWriter, request *http.Request) {
 
 	pageInfo.Pagination()
 
-	_, err = session(writer, request)
+	_, err = session(request, "_cookie")
 	if err != nil {
 		generateHTML(writer, pageInfo, "layout", "public.navbar", "index", "threadclass.page")
 		info("anonymous", request.Host, "visited")

@@ -5,10 +5,17 @@
     <div class="col-lg-2">
         <h4 class="bbs-classborder"><i class="fa fa-circle-o-notch fa-spin"></i>分类</h4>
         <ul class="nav nav-stacked">
+            <div class="row">
             {{ range threadclassinfo }}
-             <li><a class="btn-link" href='/class?id={{ .Id }}'>{{ .Name }}({{ .ThreadCount }}篇)</a></li>
+            <div class="col-sm-7" style="padding-left:30px">
+                <li><a class="btn-link" href='/class?id={{ .Id }}'>{{ .Name }}</a></li>
+            </div>
+            <div class="col-sm-5">
+                <p class="text-right">({{ .ThreadCount }}篇)</p>
+            </div>
             {{ end }}
-             <li><a class="btn-link" href='https://39.106.168.73/'><i class="fa fa-plus"></i>添加分类</a></li>
+            </div>
+            <li><a class="btn-link" href='https://{{ pubaddr }}/'><i class="fa fa-plus"></i>添加分类</a></li>
         </ul>
 
         </br>

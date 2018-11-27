@@ -1,5 +1,6 @@
 package data
 
+import "strconv"
 
 type ThreadClassInfo struct {
 		Id			int64
@@ -48,5 +49,46 @@ func ThreadsByClassAndPage(classId, CurrentPage, PageSize int64) (threads []Thre
 		}
 		threads = append(threads, conv)
 	}
+	return
+}
+
+func AddThreadClass(name string) (err error) {
+	statement := "insert into thread_class(name) values(?)"
+	stmt, _ := Db.Prepare(statement)
+	defer stmt.Close()
+
+	_, err = stmt.Exec(name)
+	return
+}
+
+func DeleteThreadClassById(id string) (err error) {
+	statement := "delete from thread_class where id = ?"
+	stmt, _ := Db.Prepare(statement)
+	defer stmt.Close()
+
+	_, err = stmt.Exec(id)
+	return
+}
+
+func ModifyThreadClass(uuid, classId string) (err error) {
+	cId, err := strconv.ParseInt(classId, 10, 64)
+	if err != nil {
+		return
+	}
+
+	statement := "update threads set class_id = ? where uuid = ?"
+	stmt, _ := Db.Prepare(statement)
+	defer stmt.Close()
+
+	_, err = stmt.Exec(cId, uuid)
+	return
+}
+
+func DeleteThread(uuid string) (err error) {
+	statement := "delete from threads where uuid = ?"
+	stmt, _ := Db.Prepare(statement)
+	defer stmt.Close()
+
+	_, err = stmt.Exec(uuid)
 	return
 }
