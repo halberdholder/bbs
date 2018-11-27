@@ -23,7 +23,13 @@
                     </p>
                 </div>
             {{ end }}
+                <div class="col-sm-8" style="padding-left:30px">
+                    <li><a class="btn-link" href='/index'>全部({{ totalthreads }}篇)</a></li>
+                </div>
             </div>
+
+            <hr/>
+            <br/>
 
             <form role="form" action="/addthreadclass" method="post">
                 <div class="form-group">
@@ -36,8 +42,9 @@
                 {{ end }}
             </form>
         </ul>
-
-        </br>
+        
+        <br/>
+        <hr/>
         <h4 class="bbs-classborder"><i class="fa fa-circle-o-notch fa-spin"></i>归档</h4>
         <ul class="list-group">
         {{ range threadarchived }}
