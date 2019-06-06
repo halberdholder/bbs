@@ -2,7 +2,7 @@
 
 <form class="form-signin center" role="form" action="/authenticate" method="post">
     <h2 class="form-signin-heading">
-        <i class="fa fa-comments-o"></i>骄傲的中年
+        <i class="fa fa-comments-o"></i>突然的自我
     </h2>
 
     <input type="email" name="email" class="form-control" placeholder="Email address" required autofocus>
@@ -19,7 +19,7 @@
     {{ end }}
 
     {{ if .Admin }}
-    <button class="btn btn-lg btn-primary btn-block" type="submit">管理员登录</button>
+    <button class="btn btn-lg btn-danger btn-block" type="submit">管理员登录</button>
     {{ else }}
     <button class="btn btn-lg btn-primary btn-block" type="submit">登录</button>
     {{ end }}

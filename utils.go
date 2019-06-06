@@ -11,7 +11,7 @@ import (
 	"os"
 	"regexp"
 	"strings"
-	)
+)
 
 type Configuration struct {
 	Address      string
@@ -24,7 +24,7 @@ type Configuration struct {
 	TLSAddress   string
 	TLSKey       string
 	TLSCert      string
-	PubAddr		 string
+	PubAddr      string
 }
 
 var config Configuration
@@ -99,7 +99,8 @@ func generateHTML(writer http.ResponseWriter, d interface{}, filenames ...string
 		"html":            unescaped,
 		"threadclassinfo": data.GetThreadClassInfo,
 		"threadarchived":  data.ThreadArchived,
-		"pubaddr":		   PubAddress,
+		"pubaddr":         PubAddress,
+		"totalthreads":    data.TotalThreads,
 	}
 
 	templates := template.New("layout.html").Funcs(funcMap)

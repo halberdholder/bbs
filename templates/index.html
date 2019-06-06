@@ -14,11 +14,17 @@
                 <p class="text-right">({{ .ThreadCount }}篇)</p>
             </div>
             {{ end }}
+            <div class="col-sm-7" style="padding-left:30px">
+                <li><a class="btn-link" href='/'>全部</a></li>
+            </div>
+            <div class="col-sm-5">
+                <p class="text-right">({{ totalthreads }}篇)</p>
+            </div>
             </div>
             <li><a class="btn-link" href='https://{{ pubaddr }}/'><i class="fa fa-plus"></i>添加分类</a></li>
         </ul>
 
-        </br>
+        <hr/>
         <h4 class="bbs-classborder"><i class="fa fa-circle-o-notch fa-spin"></i>归档</h4>
         <ul class="list-group">
             {{ range threadarchived }}

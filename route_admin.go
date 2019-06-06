@@ -22,7 +22,7 @@ type AdminPageInfo struct {
 
 func adminErr(writer http.ResponseWriter, request *http.Request) {
 	if _, err := session(request, "admin_cookie"); err != nil {
-		redirectLogin(writer)
+		redirectLogin(writer, false)
 		return
 	}
 	vals := request.URL.Query()
@@ -48,19 +48,19 @@ func adminAuthenticate(writer http.ResponseWriter, request *http.Request) {
 	err := request.ParseForm()
 	user, err := data.UserByEmail(request.PostFormValue("email"))
 	if err != nil || !isAdministrator(user) {
-		redirectLogin(writer)
+		redirectLogin(writer, true)
 		return
 	}
 
 	if user.Password != data.Encrypt(request.PostFormValue("password")) {
-		redirectLogin(writer)
+		redirectLogin(writer, true)
 		return
 	}
 
 	session, err := user.CreateSession()
 	if err != nil {
 		danger(err, "Cannot create session")
-		redirectLogin(writer)
+		redirectLogin(writer, true)
 		return
 	}
 
@@ -78,12 +78,12 @@ func adminAuthenticate(writer http.ResponseWriter, request *http.Request) {
 func adminIndex(writer http.ResponseWriter, request *http.Request) {
 	sess, err := session(request, "admin_cookie")
 	if err != nil {
-		redirectLogin(writer)
+		redirectLogin(writer, false)
 		return
 	}
 	user, err := sess.User()
 	if err != nil {
-		redirectLogin(writer)
+		redirectLogin(writer, true)
 		return
 	}
 
@@ -122,12 +122,12 @@ func adminIndex(writer http.ResponseWriter, request *http.Request) {
 func adminClass(writer http.ResponseWriter, request *http.Request) {
 	sess, err := session(request, "admin_cookie")
 	if err != nil {
-		redirectLogin(writer)
+		redirectLogin(writer, false)
 		return
 	}
 	user, err := sess.User()
 	if err != nil {
-		redirectLogin(writer)
+		redirectLogin(writer, true)
 		return
 	}
 
@@ -173,12 +173,12 @@ func adminClass(writer http.ResponseWriter, request *http.Request) {
 func addThreadClass(writer http.ResponseWriter, request *http.Request) {
 	sess, err := session(request, "admin_cookie")
 	if err != nil {
-		redirectLogin(writer)
+		redirectLogin(writer, false)
 		return
 	}
 	user, _ := sess.User()
 	if !Permission(user.Permission).CanAddThreadClass() {
-		redirectLogin(writer)
+		redirectLogin(writer, true)
 		return
 	}
 
@@ -196,12 +196,12 @@ func addThreadClass(writer http.ResponseWriter, request *http.Request) {
 func delThreadClass(writer http.ResponseWriter, request *http.Request) {
 	sess, err := session(request, "admin_cookie")
 	if err != nil {
-		redirectLogin(writer)
+		redirectLogin(writer, false)
 		return
 	}
 	user, _ := sess.User()
 	if !Permission(user.Permission).CanDelThreadClass() {
-		redirectLogin(writer)
+		redirectLogin(writer, true)
 		return
 	}
 
@@ -219,12 +219,12 @@ func delThreadClass(writer http.ResponseWriter, request *http.Request) {
 func modThreadClass(writer http.ResponseWriter, request *http.Request) {
 	sess, err := session(request, "admin_cookie")
 	if err != nil {
-		redirectLogin(writer)
+		redirectLogin(writer, false)
 		return
 	}
 	user, _ := sess.User()
 	if !Permission(user.Permission).CanModThreadClass() {
-		redirectLogin(writer)
+		redirectLogin(writer, true)
 		return
 	}
 
@@ -242,12 +242,12 @@ func modThreadClass(writer http.ResponseWriter, request *http.Request) {
 func delThread(writer http.ResponseWriter, request *http.Request) {
 	sess, err := session(request, "admin_cookie")
 	if err != nil {
-		redirectLogin(writer)
+		redirectLogin(writer, false)
 		return
 	}
 	user, _ := sess.User()
 	if !Permission(user.Permission).CanDelThread() {
-		redirectLogin(writer)
+		redirectLogin(writer, true)
 		return
 	}
 
@@ -302,9 +302,9 @@ func isAdministrator(user data.User) bool {
 	return p.CanAddThreadClass() || p.CanModThreadClass() || p.CanDelThreadClass() || p.CanDelThread()
 }
 
-func redirectLogin(w http.ResponseWriter) {
+func redirectLogin(w http.ResponseWriter, failed bool /* (err error) */) {
 	loginInfo := LoginInfo{
-		Failed: true,
+		Failed: failed,
 		Admin:  true,
 	}
 	loginInfo.Redirect(w)
